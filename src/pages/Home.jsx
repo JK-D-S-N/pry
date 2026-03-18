@@ -1,11 +1,33 @@
-import { getPrayers } from '../storage'
+import { useState } from 'react'
+import { getPrayers, getGroup } from '../storage'
 import { useStorage } from '../hooks/useStorage'
 import PrayerCard from '../components/PrayerCard'
 import EmptyState from '../components/EmptyState'
+import { ChevronDown, Users } from 'lucide-react'
 
 export default function Home() {
   const [prayers] = useStorage(getPrayers)
+  const [expandedGroups, setExpandedGroups] = useState(new Set())
+
   const active = prayers.filter(p => p.status === 'active')
+  const privatePrayers = active.filter(p => p.visibility !== 'group')
+  const groupPrayers = active.filter(p => p.visibility === 'group')
+
+  // Group by groupId, preserving order of first appearance
+  const grouped = {}
+  groupPrayers.forEach(p => {
+    if (!grouped[p.groupId]) grouped[p.groupId] = []
+    grouped[p.groupId].push(p)
+  })
+  const groupEntries = Object.entries(grouped)
+
+  function toggle(groupId) {
+    setExpandedGroups(prev => {
+      const next = new Set(prev)
+      next.has(groupId) ? next.delete(groupId) : next.add(groupId)
+      return next
+    })
+  }
 
   return (
     <div className="px-4 pt-5 pb-4">
@@ -18,9 +40,52 @@ export default function Home() {
         <EmptyState title="No prayers yet" description="Add your first prayer" to="/new" />
       ) : (
         <div className="flex flex-col gap-px border border-rim">
-          {active.map(prayer => (
+          {privatePrayers.map(prayer => (
             <PrayerCard key={prayer.id} prayer={prayer} />
           ))}
+
+          {groupEntries.map(([groupId, list]) => {
+            const group = getGroup(groupId)
+            const expanded = expandedGroups.has(groupId)
+            const count = list.length
+
+            return (
+              <div key={groupId}>
+                <button
+                  onClick={() => toggle(groupId)}
+                  className="w-full px-3 pt-2.5 pb-3 bg-surface hover:bg-elevated transition-colors border-b border-rim text-left"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-t3">
+                      <Users className="w-3 h-3" />
+                      {group?.name || 'Group'}
+                    </span>
+                    <span className="flex items-center gap-1.5 font-mono text-[10px] text-t3">
+                      {count} prayer{count !== 1 ? 's' : ''}
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
+                    </span>
+                  </div>
+                  {!expanded && (
+                    <p className="font-medium text-t1 leading-snug tracking-tight line-clamp-1">
+                      {list[0].title}
+                    </p>
+                  )}
+                </button>
+
+                {/* Stack strips — suggest depth when collapsed */}
+                {!expanded && count >= 2 && (
+                  <div className="h-[3px] bg-surface border-x border-b border-rim mx-2" />
+                )}
+                {!expanded && count >= 3 && (
+                  <div className="h-[3px] bg-surface border-x border-b border-rim mx-4" />
+                )}
+
+                {expanded && list.map(prayer => (
+                  <PrayerCard key={prayer.id} prayer={prayer} />
+                ))}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>
