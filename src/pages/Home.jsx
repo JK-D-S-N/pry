@@ -13,7 +13,6 @@ export default function Home() {
   const privatePrayers = active.filter(p => p.visibility !== 'group')
   const groupPrayers = active.filter(p => p.visibility === 'group')
 
-  // Group by groupId, preserving order of first appearance
   const grouped = {}
   groupPrayers.forEach(p => {
     if (!grouped[p.groupId]) grouped[p.groupId] = []
@@ -39,10 +38,14 @@ export default function Home() {
       {active.length === 0 ? (
         <EmptyState title="No prayers yet" description="Add your first prayer" to="/new" />
       ) : (
-        <div className="flex flex-col gap-px border border-rim">
-          {privatePrayers.map(prayer => (
-            <PrayerCard key={prayer.id} prayer={prayer} />
-          ))}
+        <div className="flex flex-col gap-3">
+          {privatePrayers.length > 0 && (
+            <div className="flex flex-col gap-px border border-rim">
+              {privatePrayers.map(prayer => (
+                <PrayerCard key={prayer.id} prayer={prayer} />
+              ))}
+            </div>
+          )}
 
           {groupEntries.map(([groupId, list]) => {
             const group = getGroup(groupId)
@@ -50,10 +53,26 @@ export default function Home() {
             const count = list.length
 
             return (
-              <div key={groupId}>
+              <div key={groupId} className="relative">
+                {/* Back cards — absolutely positioned, offset down+right */}
+                {!expanded && count >= 3 && (
+                  <div
+                    className="absolute inset-0 border border-rim bg-surface"
+                    style={{ transform: 'translate(6px, 6px)', zIndex: 1 }}
+                  />
+                )}
+                {!expanded && count >= 2 && (
+                  <div
+                    className="absolute inset-0 border border-rim bg-surface"
+                    style={{ transform: 'translate(3px, 3px)', zIndex: 2 }}
+                  />
+                )}
+
+                {/* Front card */}
                 <button
                   onClick={() => toggle(groupId)}
-                  className="w-full px-3 pt-2.5 pb-3 bg-surface hover:bg-elevated transition-colors border-b border-rim text-left"
+                  className="relative w-full px-3 pt-2.5 pb-3 bg-surface hover:bg-elevated transition-colors border border-rim text-left"
+                  style={{ zIndex: 3 }}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-t3">
@@ -72,17 +91,13 @@ export default function Home() {
                   )}
                 </button>
 
-                {/* Stack strips — suggest depth when collapsed */}
-                {!expanded && count >= 2 && (
-                  <div className="h-[3px] bg-surface border-x border-b border-rim mx-2" />
+                {expanded && (
+                  <div className="flex flex-col gap-px border-x border-b border-rim">
+                    {list.map(prayer => (
+                      <PrayerCard key={prayer.id} prayer={prayer} />
+                    ))}
+                  </div>
                 )}
-                {!expanded && count >= 3 && (
-                  <div className="h-[3px] bg-surface border-x border-b border-rim mx-4" />
-                )}
-
-                {expanded && list.map(prayer => (
-                  <PrayerCard key={prayer.id} prayer={prayer} />
-                ))}
               </div>
             )
           })}
