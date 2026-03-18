@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getPrayers, getGroup } from '../storage'
 import { useStorage } from '../hooks/useStorage'
 import PrayerCard from '../components/PrayerCard'
@@ -29,7 +30,7 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 pt-5 pb-4">
+    <div className="px-4 pt-5 pb-24">
       <div className="flex items-baseline justify-between mb-4">
         <h1 className="text-xl font-semibold text-t1 tracking-tight">Prayers</h1>
         <span className="font-mono text-[11px] text-t3">{active.length} active</span>
@@ -112,6 +113,13 @@ export default function Home() {
           })}
         </div>
       )}
+
+      <Link
+        to="/new"
+        className="fixed bottom-20 left-1/2 -translate-x-1/2 px-8 py-2.5 border border-gold text-gold font-mono text-[11px] uppercase tracking-widest bg-bg/80 backdrop-blur-sm hover:bg-gold hover:text-bg transition-all whitespace-nowrap"
+      >
+        Add prayer
+      </Link>
     </div>
   )
 }
