@@ -13,7 +13,7 @@ export function shareText(text) {
 }
 
 export function groupInviteText(groupName, inviteCode) {
-  return `Hey! Join my prayer group "${groupName}" on sounding.\n\nInvite code: ${inviteCode}`
+  return `Hey! Join my prayer group "${groupName}" on pry.\n\nInvite code: ${inviteCode}`
 }
 
 export function answeredPrayerText(title, note) {

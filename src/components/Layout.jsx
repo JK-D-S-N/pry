@@ -2,9 +2,9 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { Home, Users, Settings } from 'lucide-react'
 
 const NAV = [
-  { to: '/',         icon: Home,     label: 'Prayers',  end: true  },
-  { to: '/groups',   icon: Users,    label: 'Groups',   end: false },
-  { to: '/settings', icon: Settings, label: 'Settings', end: false },
+  { to: '/',         icon: Home,     label: 'Pry',  end: true  },
+  { to: '/groups',   icon: Users,    label: 'Grp',  end: false },
+  { to: '/settings', icon: Settings, label: 'Stns', end: false },
 ]
 
 export default function Layout() {
@@ -15,6 +15,9 @@ export default function Layout() {
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-bg border-t border-rim z-10">
+        <div className="max-w-lg mx-auto border-b border-rim flex items-center justify-center h-6">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-t3">pry</span>
+        </div>
         <div className="max-w-lg mx-auto flex items-end">
           {NAV.map(({ to, icon: Icon, label, end }) => (
             <NavLink

@@ -34,7 +34,7 @@ export default function Settings() {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'sounding-export.json'
+    a.download = 'pry-export.json'
     a.click()
     URL.revokeObjectURL(url)
   }

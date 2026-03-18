@@ -37,7 +37,7 @@ export default function Onboarding() {
     return (
       <div className="min-h-dvh flex flex-col justify-center px-6 bg-bg">
         <div className="w-full max-w-sm mx-auto">
-          <p className="font-mono text-[11px] uppercase tracking-widest text-t3 mb-6">sounding</p>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-t3 mb-6">pry</p>
           <h1 className="text-3xl font-semibold text-t1 tracking-tight leading-tight mb-2">
             Check your email.
           </h1>
@@ -58,7 +58,7 @@ export default function Onboarding() {
   return (
     <div className="min-h-dvh flex flex-col justify-center px-6 bg-bg">
       <div className="w-full max-w-sm mx-auto">
-        <p className="font-mono text-[11px] uppercase tracking-widest text-t3 mb-6">sounding</p>
+        <p className="font-mono text-[11px] uppercase tracking-widest text-t3 mb-6">pry</p>
 
         <h1 className="text-3xl font-semibold text-t1 tracking-tight leading-tight mb-2">
           A quiet place<br />for your prayers.
