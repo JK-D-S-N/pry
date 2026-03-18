@@ -53,7 +53,11 @@ export default function Home() {
             const count = list.length
 
             return (
-              <div key={groupId} className="relative">
+              <div
+                key={groupId}
+                className="relative"
+                style={{ marginBottom: !expanded && count >= 3 ? 6 : !expanded && count >= 2 ? 3 : 0 }}
+              >
                 {/* Back cards — absolutely positioned, offset down+right */}
                 {!expanded && count >= 3 && (
                   <div
